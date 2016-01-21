@@ -125,6 +125,15 @@ EOPHP
 		set_config 'WP_DEBUG' 1 boolean
 	fi
 
+  echo
+	for f in /docker-entrypoint-initwordpress.d/*; do
+		case "$f" in
+			*.sh)	echo "$0: running $f"; . "$f" ;;
+			*)	echo "$0: ignoring $f" ;;
+		esac
+		echo
+	done
+
 	TERM=dumb php -- "$WORDPRESS_DB_HOST" "$WORDPRESS_DB_USER" "$WORDPRESS_DB_PASSWORD" "$WORDPRESS_DB_NAME" <<'EOPHP'
 <?php
 // database might not exist, so let's try creating it (just to be safe)
