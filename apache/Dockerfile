@@ -3,25 +3,20 @@ FROM php:5.6-apache
 RUN a2enmod rewrite expires
 
 # install the PHP extensions we need
-RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev && rm -rf /var/lib/apt/lists/* \
-	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
-	&& docker-php-ext-install gd mysqli opcache
-
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=60'; \
-		echo 'opcache.fast_shutdown=1'; \
-		echo 'opcache.enable_cli=1'; \
-	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
+RUN apt-get update && apt-get install -y \
+			libfreetype6-dev \
+			libjpeg62-turbo-dev \
+			libjpeg-dev \
+			libmcrypt-dev \
+			libpng12-dev \
+			&& rm -rf /var/lib/apt/lists/* \
+		&& docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-png-dir=/usr --with-jpeg-dir=/usr \
+		&& docker-php-ext-install gd mysqli iconv mcrypt
 
 VOLUME /var/www/html
 
-ENV WORDPRESS_VERSION 4.5.1
-ENV WORDPRESS_SHA1 9bf09e0ca8f656b650b3056339e2d3eb28c6355e
+ENV WORDPRESS_VERSION 4.5.2
+ENV WORDPRESS_SHA1 bab94003a5d2285f6ae76407e7b1bbb75382c36e
 
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
 RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz \
