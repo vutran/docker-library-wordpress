@@ -125,7 +125,7 @@ EOPHP
 		set_config 'WP_DEBUG' 1 boolean
 	fi
 
-  echo
+	echo
 	for f in /docker-entrypoint-initwordpress.d/*; do
 		case "$f" in
 			*.sh)	echo "$0: running $f"; . "$f" ;;
