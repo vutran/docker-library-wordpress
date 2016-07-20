@@ -125,6 +125,14 @@ EOPHP
 		set_config 'WP_DEBUG' 1 boolean
 	fi
 
+  if [ "$WORDPRESS_MEMORY_LIMIT" ]; then
+    set_config 'WP_MEMORY_LIMIT' "$WORDPRESS_MEMORY_LIMIT"
+  fi
+
+  if [ "$WORDPRESS_MAX_MEMORY_LIMIT" ]; then
+    set_config 'WP_MAX_MEMORY_LIMIT' "$WORDPRESS_MAX_MEMORY_LIMIT"
+  fi
+
 	echo
 	for f in /docker-entrypoint-initwordpress.d/*; do
 		case "$f" in
